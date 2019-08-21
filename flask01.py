@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, abort, Response
 from werkzeug.routing import BaseConverter
 
 # 创建flask应用对象
@@ -40,11 +40,21 @@ def index():
 
 @app.route('/login')
 def login():
-    # url_for通过视图名称找到对应路由
-    url = url_for('index')
-    # 重定向
-    return redirect(url)
+    name, pwd = '', ''
+    if name == 'grubby' and pwd == 'orc':
+        # url_for通过视图名称找到对应路由
+        url = url_for('index')
+        return redirect(url)
+    else:
+        # abort函数：传递状态码或响应体,终止视图函数执行并给前端返回特定信息
+        abort(404)
+        # abort(Response('login failed!'))
 
+# 自定义错误处理方法
+@app.errorhandler(404)
+def handle_404(err):
+    # 给前端响应错误处理信息
+    return '当前页面请求错误, %s' % err
 
 # 默认转换器：路由传递的参数默认字符串,可使用int/float转换器
 # @app.route('/goods/<goods_id>')
