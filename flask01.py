@@ -1,4 +1,5 @@
-from flask import Flask, request, redirect, url_for, abort, Response
+# coding=utf-8
+from flask import Flask, request, redirect, url_for, abort, Response, make_response, jsonify
 from werkzeug.routing import BaseConverter
 
 # 创建flask应用对象
@@ -32,11 +33,23 @@ def index():
     data = request.data
     # 提取url中的参数
     city = request.args.get('city')
+    # return 'hello name=%s, names=%s, data=%s, city=%s' % (name, names, data, city)
     # 接收文件
     file = request.files.get('pic')
     if file:
         file.save('demo.jpg')
-    return 'hello name=%s, names=%s, data=%s, city=%s' % (name, names, data, city)
+    # 构造响应信息
+    # resp = make_response('hello')  # 响应体
+    # resp.status = '200 ok'  # 状态码
+    # resp.headers['city'] = 'shanghai'  # 响应头
+    # return resp
+    data = {
+        'name': 'grubby',
+        'age': 18
+    }
+    # jsonify将字典转换成json数据返回,并设置响应头Content-Type: application/json,不然是Content-Type: text/html; charset=utf-8
+    return jsonify(data)  # 类似django的JsonResponse
+
 
 @app.route('/login')
 def login():
