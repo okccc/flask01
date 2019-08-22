@@ -43,16 +43,17 @@ def index():
     # response.status = '200 ok'  # 状态码
     # response.headers['city'] = 'shanghai'  # 响应头
     # return response
+    a = 1/0
     data = {
         'name': 'grubby',
         'age': 18
     }
     # jsonify将字典转换成json数据返回,并设置响应头Content-Type: application/json,不然是Content-Type: text/html; charset=utf-8
-    # return jsonify(data)  # 类似django的JsonResponse
+    return jsonify(data)  # 类似django的JsonResponse
     # 获取session信息
-    username = session.get('username')
-    age = session.get('age')
-    return 'hello %s, %d' % (username, age)
+    # username = session.get('username')
+    # age = session.get('age')
+    # return 'hello %s, %d' % (username, age)
 
 
 @app.route('/login')
@@ -119,6 +120,30 @@ def session01():
     session['username'] = 'grubby'
     session['age'] = 18
     return 'session测试'
+
+# flask中的钩子函数相当于django中的中间件
+@app.before_first_request
+def before_first_request():
+    # 处理第一个请求之前被执行
+    print('before_first_request 被执行')
+
+@app.before_request
+def before_request():
+    # 每次请求之前都被执行
+    print('before_request 被执行')
+
+@app.after_request
+def after_request(response):
+    # 每次请求视图函数之后都被执行,前提是不出现异常
+    print('after_request 被执行')
+    return response
+
+@app.teardown_request
+def teardown_request(response):
+    # 每次请求视图函数之后都被执行,无论是否出现异常,但是要在非调试模式下debug=False
+    print('teardown_request 被执行')
+    return response
+
 
 if __name__ == '__main__':
     # url_map查看整个flask路由信息
