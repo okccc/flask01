@@ -1,6 +1,7 @@
 # coding=utf-8
 from flask import Flask, request, redirect, url_for, abort, Response, make_response, jsonify, session
-from werkzeug.routing import BaseConverter
+from werkzeug.routing import BaseConverter  # 转换器类
+from flask_script import Manager  # 命令行启动的管理类
 
 # 创建flask应用对象
 app = Flask(
@@ -43,7 +44,6 @@ def index():
     # response.status = '200 ok'  # 状态码
     # response.headers['city'] = 'shanghai'  # 响应头
     # return response
-    a = 1/0
     data = {
         'name': 'grubby',
         'age': 18
@@ -144,9 +144,14 @@ def teardown_request(response):
     print('teardown_request 被执行')
     return response
 
+# 将app交给manager管理,类似django的python manager.py runserver ip:port
+manager = Manager(app)
+
 
 if __name__ == '__main__':
-    # url_map查看整个flask路由信息
+    # 查看flask应用所有路由信息
     print(app.url_map)
     # 启动flask程序
-    app.run(host='192.168.152.11', port=5000, debug=True)  # host='0.0.0.0'表示允许任何ip访问,开启debug显示错误信息
+    # app.run(host='192.168.152.11', port=5000, debug=True)  # host='0.0.0.0'表示允许任何ip访问,开启debug显示错误信息
+    # 通过manager启动flask,在终端输入命令行python flask01.py runserver -h 192.168.152.11 -p 8888
+    manager.run()
