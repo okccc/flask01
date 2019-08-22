@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask, request, redirect, url_for, abort, Response, make_response, jsonify
+from flask import Flask, request, redirect, url_for, abort, Response, make_response, jsonify, session
 from werkzeug.routing import BaseConverter
 
 # 创建flask应用对象
@@ -39,16 +39,20 @@ def index():
     if file:
         file.save('demo.jpg')
     # 构造响应信息
-    # resp = make_response('hello')  # 响应体
-    # resp.status = '200 ok'  # 状态码
-    # resp.headers['city'] = 'shanghai'  # 响应头
-    # return resp
+    # response = make_response('hello')  # 响应体
+    # response.status = '200 ok'  # 状态码
+    # response.headers['city'] = 'shanghai'  # 响应头
+    # return response
     data = {
         'name': 'grubby',
         'age': 18
     }
     # jsonify将字典转换成json数据返回,并设置响应头Content-Type: application/json,不然是Content-Type: text/html; charset=utf-8
-    return jsonify(data)  # 类似django的JsonResponse
+    # return jsonify(data)  # 类似django的JsonResponse
+    # 获取session信息
+    username = session.get('username')
+    age = session.get('age')
+    return 'hello %s, %d' % (username, age)
 
 
 @app.route('/login')
@@ -98,6 +102,23 @@ app.url_map.converters['re'] = RegexConverter
 def send(mobile):
     return 'send msg to %s' % mobile
 
+@app.route('/cookie01')
+def cookie01():
+    response = make_response('cookie测试')
+    # 设置cookie：浏览器地址栏左侧感叹号 - 查看网站信息 - 查看cookie使用情况
+    response.set_cookie(key='k1', value='v1', max_age=3600)
+    # 删除cookie：浏览器并没有立即删除该cookie,而是设置到期时间=创建时间表示该cookie已失效,浏览器本身会定时清理网站cookie信息
+    response.delete_cookie(key='k1')
+    return response
+
+# flask中session需使用秘钥字符串
+app.config['SECRET_KEY'] = 'adasfasfe2ssdfefsf'  # 随机字符串
+@app.route('/session01')
+def session01():
+    # flask默认把session信息和秘钥字符串糅杂在一起保存到cookie中,django是保存到后端数据库mysql/redis
+    session['username'] = 'grubby'
+    session['age'] = 18
+    return 'session测试'
 
 if __name__ == '__main__':
     # url_map查看整个flask路由信息
