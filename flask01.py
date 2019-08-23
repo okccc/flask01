@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Flask, request, redirect, url_for, abort, Response, make_response, jsonify, session
+from flask import Flask, request, redirect, url_for, abort, Response, make_response, jsonify, session, render_template
 from werkzeug.routing import BaseConverter  # 转换器类
 from flask_script import Manager  # 命令行启动的管理类
 
@@ -22,7 +22,7 @@ app.config.from_object(Config)
 # 3.直接操作config字典对象
 # app.config['DEBUG'] = True
 
-# 定义路由,methods限定请求方式
+# 定义路由,methods限定请求方式,默认GET
 @app.route('/', methods=['GET', 'POST'])
 # 定义视图函数
 def index():
@@ -147,11 +147,24 @@ def teardown_request(response):
 # 将app交给manager管理,类似django的python manager.py runserver ip:port
 manager = Manager(app)
 
+# jinja2模板
+@app.route('/template')
+def template():
+    data = {
+        "name": "grubby",
+        "age": 18,
+        "my_dict": {"city": "上海"},
+    }
+    # 渲染模板,**data表示将字典拆包成key=value对
+    return render_template('index.html', **data)
+
+
+
 
 if __name__ == '__main__':
     # 查看flask应用所有路由信息
     print(app.url_map)
     # 启动flask程序
-    # app.run(host='192.168.152.11', port=5000, debug=True)  # host='0.0.0.0'表示允许任何ip访问,开启debug显示错误信息
+    app.run(host='192.168.152.11', port=5000, debug=True)  # host='0.0.0.0'表示允许任何ip访问,开启debug显示错误信息
     # 通过manager启动flask,在终端输入命令行python flask01.py runserver -h 192.168.152.11 -p 8888
-    manager.run()
+    # manager.run()
