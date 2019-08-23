@@ -158,7 +158,12 @@ def template():
     # 渲染模板,**data表示将字典拆包成key=value对
     return render_template('index.html', **data)
 
-
+@app.route('/xss', methods=['GET', 'POST'])
+def xss():
+    text = ''
+    if request.method == 'POST':
+        text = request.form.get('text')
+    return render_template('xss.html', text=text)
 
 
 if __name__ == '__main__':
