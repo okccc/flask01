@@ -150,14 +150,24 @@ manager = Manager(app)
 # jinja2模板
 @app.route('/template')
 def template():
+    # 字符串过滤器：safe、capitalize、lower、upper、title、trim、reverse、format、striptags
+    # 列表过滤器：first、last、length、sum、sort
     data = {
         "name": "grubby",
         "age": 18,
         "my_dict": {"city": "上海"},
+        "my_list": [1, 2, 3, 4, 5],
     }
     # 渲染模板,**data表示将字典拆包成key=value对
     return render_template('index.html', **data)
 
+# 自定义模板过滤器
+@app.template_filter(name='li2')
+def my_filter(li):
+    # 取列表数据步长为2
+    return li[::2]
+
+# xss跨站脚本攻击
 @app.route('/xss', methods=['GET', 'POST'])
 def xss():
     text = ''
