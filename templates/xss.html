@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>xss跨站脚本注入</title>
+</head>
+<body>
+    <form method="post">
+        <label>
+            <textarea name="text"></textarea>
+        </label>
+        <input type="submit" value="提交">
+    </form>
+    {# html默认是转义的,safe禁用转义,否则无法识别像<script>alert('attack!');</script>这种注入脚本,因为<>被转义成&lt;&gt; #}
+    {{ text | safe}}  {# chrome能识别script脚本,其他浏览器不行 #}
+</body>
+</html>

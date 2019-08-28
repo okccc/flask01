@@ -3,7 +3,8 @@ from flask import Flask, request, redirect, url_for, abort, Response, make_respo
 from werkzeug.routing import BaseConverter  # 转换器类
 from flask_script import Manager  # 命令行启动的管理类
 
-# 创建flask应用对象
+
+# 创建flask应用对象app,相当于创建django中的project
 app = Flask(
     # __name__使用说明：如果是程序运行入口就是__main__,如果是被当做模块导入就是模块名
     __name__,  # __name__表示当前模块名字,flask以这个模块所在目录为根目录,根目录中的static为静态目录,templates为模板目录
