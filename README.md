@@ -13,6 +13,7 @@ upstream flask{
     # flask集群地址,nginx要单独装一台机器,外界通过nginx访问网站
     server 192.168.152.11:5000;
     server 192.168.152.11:5001;
+    server 192.168.152.11:5002;
 }
 
 server {

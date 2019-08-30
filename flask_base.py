@@ -57,17 +57,22 @@ def index():
     # return 'hello %s, %d' % (username, age)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    name, pwd = '', ''
-    if name == 'grubby' and pwd == 'orc':
+    name = request.form.get('name')
+    password = request.form.get('password')
+    if not all([name, password]):
+        return jsonify(code=1, message='用户名和密码不能为空')
+    if name == 'grubby' and password == 'orc':
         # url_for通过视图名称找到对应路由
-        url = url_for('index')
-        return redirect(url)
+        # url = url_for('index')
+        # return redirect(url)
+        return jsonify(code=0, message='ok')
     else:
         # abort函数：传递状态码或响应体,终止视图函数执行并给前端返回特定信息
-        abort(404)
+        # abort(404)
         # abort(Response('login failed!'))
+        return jsonify(code=2, message='用户名或密码错误')
 
 # 自定义错误处理方法
 @app.errorhandler(404)
@@ -165,7 +170,7 @@ def template():
 # 自定义模板过滤器
 @app.template_filter(name='li2')
 def my_filter(li):
-    # 取列表数据步长为2
+    # 取列表数据且步长为2
     return li[::2]
 
 # xss跨站脚本攻击
@@ -182,5 +187,5 @@ if __name__ == '__main__':
     print(app.url_map)
     # 启动flask程序
     app.run(host='192.168.152.11', port=5000, debug=True)  # host='0.0.0.0'表示允许任何ip访问,开启debug显示错误信息
-    # 通过manager启动flask,在终端输入命令行python flask01.py runserver -h 192.168.152.11 -p 8888
+    # 通过manager启动flask,在终端输入命令行python flask_base.py runserver -h 192.168.152.11 -p 8888
     # manager.run()
