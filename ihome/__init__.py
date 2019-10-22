@@ -50,7 +50,8 @@ def create_app(config_type):
     # 为flask对象补充csrf防护
     CSRFProtect(app)
 
-    #
+    # 将自定义转换器添加到app
+    app.url_map.converters['re'] = ReConverter
 
     # 将蓝图注册到app
     app.register_blueprint(api, url_prefix="/api_1_0")
