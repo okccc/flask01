@@ -7,8 +7,8 @@ from flask_wtf import CSRFProtect  # csrf
 import redis
 import logging
 from logging.handlers import RotatingFileHandler  # 日志记录器
-from ihome.api_1_0 import api
 from ihome.utils.commons import ReConverter  # 正则转换器
+
 
 # 设置日志级别
 logging.basicConfig(level=logging.DEBUG)
@@ -53,7 +53,10 @@ def create_app(config_type):
     # 将自定义转换器添加到app
     app.url_map.converters['re'] = ReConverter
 
-    # 将蓝图注册到app
-    app.register_blueprint(api, url_prefix="/api_1_0")
+    # 注册蓝图到app,使用时再import防止循环导入
+    from ihome.api_1 import api
+    app.register_blueprint(api, url_prefix="/api_1")
+    from ihome.index import html  # 访问静态文件的蓝图
+    app.register_blueprint(html)
 
     return app
