@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-常用工具包
+该模块保存常用工具包
 """
 from werkzeug.routing import BaseConverter  # 转换器基类
 
