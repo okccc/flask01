@@ -15,7 +15,8 @@ def get_image_code(image_code_id):
     """
     获取图片验证码
     :param image_code_id: 图片验证码的编号
-    :return: 正常:返回验证码图片  异常:返回json信息
+    :return: 正常:返回图片验证码  异常:返回json信息
+    注意：前端修改js文件后要在浏览器清除缓存,不然浏览器还会使用之前缓存的js
     """
 
     # 使用captcha库生成验证码(名称,文本值,图片数据)
