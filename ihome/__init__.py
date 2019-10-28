@@ -54,8 +54,8 @@ def create_app(config_type):
     app.url_map.converters['re'] = ReConverter
 
     # 注册蓝图到app,使用时再import防止循环导入
-    from ihome.api_1 import api
-    app.register_blueprint(api, url_prefix="/api_1")
+    from ihome.api_v1 import api
+    app.register_blueprint(api, url_prefix="/api_v1")
     from ihome.index import html  # 访问静态文件的蓝图
     app.register_blueprint(html)
 
