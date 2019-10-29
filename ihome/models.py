@@ -5,7 +5,7 @@
 """
 from datetime import datetime
 from . import db
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash  # sha256算法加密
 
 import pymysql
 pymysql.install_as_MySQLdb()
@@ -31,23 +31,19 @@ class User(BaseModel, db.Model):
     houses = db.relationship("House", backref="user")  # 用户发布的房屋
     orders = db.relationship("Order", backref="user")  # 用户下的订单
 
-    # 加上property装饰器后,会把函数变为属性,属性名即为函数名
+    # property装饰器会把函数变为属性,属性名即函数名
     @property
     def password(self):
-        """读取属性的函数行为"""
-        # print(user.password)  # 读取属性时被调用
-        # 函数的返回值会作为属性值
-        # return "xxxx"
-        raise AttributeError("这个属性只能设置,不能读取")
+        # 读取属性
+        raise AttributeError("该属性只能设置不能读取")
 
-    # 使用这个装饰器, 对应设置属性操作
+    # 使用这个装饰器设置属性
     @password.setter
     def password(self, value):
-        """
-        设置属性  user.passord = "xxxxx"
-        :param value: 设置属性时的数据 value就是"xxxxx", 原始的明文密码
-        :return:
-        """
+        # 设置属性
+        # 盐值   salt
+        # 用户1  password="123456" + "abc"   sha1   abc$hxosifodfdoshfosdhfso
+        # 用户2  password="123456" + "def"   sha1   def$dfhsoicoshdoshfosidfs
         self.password_hash = generate_password_hash(value)
 
     # def generate_password_hash(self, origin_password):
