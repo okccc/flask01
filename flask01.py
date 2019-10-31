@@ -2,20 +2,21 @@
 from flask import Flask, request, redirect, url_for, abort, Response, make_response, jsonify, session, render_template
 from werkzeug.routing import BaseConverter  # 转换器类
 from flask_script import Manager  # 命令行启动的管理类
+from flask import Blueprint  # 蓝图
 
 
 # 创建flask应用对象app,相当于创建django中的project
 app = Flask(
     # __name__使用说明：如果是程序运行入口就是__main__,如果是被当做模块导入就是模块名
     __name__,  # __name__表示当前模块名字,flask以这个模块所在目录为根目录,根目录中的static为静态目录,templates为模板目录
-    static_url_path='/flask',  # 设置访问静态资源的url前缀,默认static
-    static_folder='static',  # 存放静态文件的目录,默认static
+    static_url_path='/flask',     # 设置访问静态资源的url前缀,默认static
+    static_folder='static',       # 存放静态文件的目录,默认static
     template_folder='templates',  # 存放模板文件的目录,默认templates
 )
 
 # 参数配置方式
 # 1.使用配置文件
-# app.config.from_pyfile('config.cfg')
+app.config.from_pyfile('config.py')
 # 2.使用对象配置参数
 class Config(object):
     DEBUG = True
@@ -80,7 +81,7 @@ def handle_404(err):
     # 给前端响应错误处理信息
     return '当前页面请求错误, %s' % err
 
-# 默认转换器：路由传递的参数默认字符串,可使用int/float转换器
+# 默认转换器：路由传递的参数默认字符串,可使用int/float转换器转换参数类型
 # @app.route('/goods/<goods_id>')
 @app.route('/goods/<int:goods_id>')
 def goods(goods_id):
@@ -164,7 +165,7 @@ def template():
         "my_dict": {"city": "上海"},
         "my_list": [1, 2, 3, 4, 5],
     }
-    # 渲染模板,**data表示将字典拆包成key=value对
+    # 渲染模板,**data表示将字典拆包成key=value键值对
     return render_template('index.html', **data)
 
 # 自定义模板过滤器
@@ -181,11 +182,27 @@ def xss():
         text = request.form.get('text')
     return render_template('xss.html', text=text)
 
+# 创建蓝图对象,user是蓝图名称,__name__表示蓝图所在模块
+# 蓝图用于定义单个应用的视图和静态资源,将应用和主服务拆分开
+user = Blueprint('user', __name__)
+@user.route('/add')
+def add():
+    return 'add方法'
+
+admin = Blueprint('admin', __name__)
+@admin.route('/delete')
+def delete():
+    return 'delete方法'
+
+# 将蓝图注册到app
+app.register_blueprint(user, url_prefix='/user')
+app.register_blueprint(admin, url_prefix='/admin')
+
 
 if __name__ == '__main__':
     # 查看flask应用所有路由信息
     print(app.url_map)
     # 启动flask程序
     app.run(host='192.168.152.11', port=5000, debug=True)  # host='0.0.0.0'表示允许任何ip访问,开启debug显示错误信息
-    # 通过manager启动flask,在终端输入命令行python flask_base.py runserver -h 192.168.152.11 -p 8888
+    # 通过manager启动flask,在终端输入命令行python flask01.py runserver -h 192.168.152.11 -p 8888
     # manager.run()

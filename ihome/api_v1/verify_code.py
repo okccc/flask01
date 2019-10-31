@@ -23,10 +23,10 @@ def get_image_code(image_code_id):
     注意：前端修改js文件后要在浏览器清除缓存,不然浏览器还会使用之前缓存的js
     """
 
-    # 业务逻辑处理
-    # 使用captcha库生成验证码(名称,文本值,图片数据)
+    # 1.使用captcha库生成验证码(名称,文本值,图片数据)
     name, text, value = captcha.generate_captcha()
-    # 将验证码文本值和编号保存到redis
+
+    # 2.将验证码文本值和编号保存到redis
     # 分析：如果用hash数据结构,"image_codes": {"id1":"aaa", "id2":"bbb"}只能整体维护"image_codes"这个key的有效期
     #      合理做法应该是单独维护每个验证码的有效期,所以选择字符串"image_code_id1": "aaa", "image_code_id2": "bbb"
     try:

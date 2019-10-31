@@ -5,7 +5,7 @@
 """
 from datetime import datetime
 from . import db
-from werkzeug.security import generate_password_hash  # sha256算法加密
+from werkzeug.security import generate_password_hash, check_password_hash  # sha256算法加密, 校验密码
 
 import pymysql
 pymysql.install_as_MySQLdb()
@@ -49,6 +49,10 @@ class User(BaseModel, db.Model):
     # def generate_password_hash(self, origin_password):
     #     """对密码进行加密"""
     #     self.password_hash = generate_password_hash(origin_password)
+
+    def check_password(self, value):
+        # 校验输入密码是否正确
+        return check_password_hash(self.password_hash, value)
 
 
 class Area(BaseModel, db.Model):

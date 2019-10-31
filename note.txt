@@ -1,0 +1,17 @@
+IP 101.200.170.171 (公网ip)
+www.itcastcpp.cn
+
+flask程序的url /wechat80    默认运行端口80
+
+微信配置url http://101.200.170.171/wechat80xx
+
+scp ./wechat.py  root@101.200.170.171:~/xxx/
+
+用户访问的网页网址
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect
+
+http://www.itcastcpp.cn/wechat8000/index
+urllib.quote()
+
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx36766f74dbfeef15&redirect_uri=http%3A//www.itcastcpp.cn/wechat8000/index
+&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect

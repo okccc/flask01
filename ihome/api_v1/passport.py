@@ -62,10 +62,12 @@ def register():
     # 设置属性
     user.password = password
     try:
+        # 添加数据
         db.session.add(user)
+        # 提交
         db.session.commit()
     except IntegrityError as e:
-        # 数据库操作错误后要回滚
+        # 数据库操作异常时要回滚
         db.session.rollback()
         # mobile字段出现重复值,表示该手机号已经注册过
         current_app.logger.error(e)

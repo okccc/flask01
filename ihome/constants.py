@@ -17,3 +17,9 @@ LOGIN_ERROR_MAX_TIMES = 5
 
 # 登录错误限制时间
 LOGIN_ERROR_FORBID_TIME = 600
+
+# 七牛域名
+QINIU_URL_DOMAIN = "http://o91qujnqh.bkt.clouddn.com/"
+
+# 城区信息的缓存时间
+AREA_INFO_REDIS_CACHE_EXPIRES = 7200
